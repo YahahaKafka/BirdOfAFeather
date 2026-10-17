@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BIRDS OF A FEATHER | Resonance</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=Playfair+Display:ital,wght@0,700;1,700&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root{--bg:#0a120f;--cream:#f0eadc;--green:#a8c6a0;--lime:#d6ff9a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--cream);font-family:'Space Grotesk',sans-serif}
+button{cursor:pointer;font:inherit}
+.page{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:65px 14px 25px;background:radial-gradient(ellipse at 50% 25%,#293d2d 0%,#0a120f 70%)}
+.top{position:fixed;z-index:20;top:17px;left:18px;right:18px;display:flex;justify-content:space-between;font:10px 'DM Mono',monospace;letter-spacing:2px;color:#aaa}
+.top strong{display:block;color:var(--cream);margin-bottom:5px}
+.stage{width:min(100%,430px);height:min(72svh,700px);min-height:490px;position:relative;overflow:hidden;background:#1c3021;border:1px solid #ffffff22;isolation:isolate}
+.backdrop{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 38%,#718b5c 0%,#334a38 30%,#142119 70%,#080d0b 100%)}
+.orb{position:absolute;width:68%;aspect-ratio:1;left:16%;top:22%;border:1px solid #ffffff40;border-radius:50%;box-shadow:0 0 80px #d6ff9a22,inset 0 0 60px #d6ff9a16;animation:float 5s ease-in-out infinite alternate}
+.orb:before,.orb:after{content:"";position:absolute;inset:12%;border:1px solid #ffffff35;border-radius:50%;transform:scaleX(.6) rotate(35deg)}
+.orb:after{inset:-12%;transform:scaleX(.4) rotate(-35deg)}
+@keyframes float{to{transform:translateY(-20px) rotate(10deg) scale(1.08)}}
+#photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.38;filter:contrast(1.1) saturate(.7);transform:scale(1.05);transition:opacity .4s}
+.photo-label{position:absolute;top:75%;width:100%;text-align:center;font:10px 'DM Mono',monospace;letter-spacing:3px;color:#ffffff88}
+.shade{position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(#0005,transparent 22%,transparent 68%,#0009)}
+.meta{position:absolute;z-index:7;top:17px;left:16px;right:16px;display:flex;justify-content:space-between;font:9px 'DM Mono',monospace;letter-spacing:1.5px;line-height:1.8;color:#eee9}
+.meta .right{text-align:right}
+.side{position:absolute;z-index:7;bottom:19px;left:15px;writing-mode:vertical-rl;transform:rotate(180deg);font:9px 'DM Mono',monospace;letter-spacing:2px;color:#ffffff99}
+.counter{position:absolute;z-index:7;right:17px;bottom:20px;font:10px 'DM Mono',monospace}
+#lyric{position:absolute;z-index:8;inset:0;display:grid;place-content:center;padding:22px;text-align:center;font-size:clamp(42px,12vw,76px);font-weight:700;line-height:.85;letter-spacing:-.08em;text-transform:uppercase;text-wrap:balance;will-change:transform,opacity,filter;text-shadow:0 4px 30px #0004}
+.serif{font-family:'Playfair Display',serif;font-style:italic;text-transform:none!important;letter-spacing:-.06em!important}
+.outline{color:transparent;-webkit-text-stroke:1px var(--cream);text-shadow:none!important}
+.flash{position:absolute;inset:0;z-index:12;background:var(--cream);opacity:0;pointer-events:none}
+.flash.hit{animation:flash .2s ease-out}
+@keyframes flash{0%{opacity:0}20%{opacity:.8}100%{opacity:0}}
+.stage.shake{animation:shake .25s linear}
+@keyframes shake{0%,100%{transform:translate(0)}25%{transform:translate(-5px,2px)}50%{transform:translate(4px,-3px)}75%{transform:translate(-2px,1px)}}
+.zoom{animation:zoom .65s cubic-bezier(.15,.85,.15,1) both}
+@keyframes zoom{0%{opacity:0;transform:scale(.05);filter:blur(10px)}45%{opacity:1;filter:blur(0)}75%{transform:scale(1.13)}100%{opacity:1;transform:scale(1)}}
+.left{animation:left .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes left{0%{opacity:0;transform:translateX(120%) rotate(10deg) scale(.7);filter:blur(7px)}70%{opacity:1;transform:translateX(-4%) rotate(-2deg) scale(1.06);filter:blur(0)}100%{opacity:1;transform:translateX(0) rotate(0) scale(1)}}
+.right{animation:right .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes right{0%{opacity:0;transform:translateX(-120%) rotate(-10deg) scale(.7);filter:blur(7px)}70%{opacity:1;transform:translateX(4%) rotate(2deg) scale(1.06);filter:blur(0)}100%{opacity:1;transform:translateX(0) rotate(0) scale(1)}}
+.drop{animation:drop .58s cubic-bezier(.15,.85,.2,1) both}
+@keyframes drop{0%{opacity:0;transform:translateY(-130%) scale(1.2);filter:blur(8px)}70%{opacity:1;transform:translateY(6%) scale(.96);filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.punch{animation:punch .42s cubic-bezier(.2,.9,.2,1) both}
+@keyframes punch{0%{opacity:0;transform:scale(2.3);filter:blur(10px)}35%{opacity:1;filter:blur(0)}65%{transform:scale(.88) rotate(-2deg)}100%{opacity:1;transform:scale(1)}}
+.spin{animation:spin .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes spin{0%{opacity:0;transform:translate(30%,15%) rotate(15deg) scale(.4);filter:blur(8px)}70%{opacity:1;transform:translate(-2%,-2%) rotate(-3deg) scale(1.08);filter:blur(0)}100%{opacity:1;transform:none}}
+.controls{width:min(100%,430px);margin-top:17px}
+.track{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:13px}
+.title{font:700 20px 'Playfair Display',serif}
+.artist{font:10px 'DM Mono',monospace;color:#aaa;letter-spacing:1px;margin-top:4px}
+.badge{font:9px 'DM Mono',monospace;color:var(--lime);border:1px solid #d6ff9a66;padding:6px 8px;border-radius:20px;white-space:nowrap}
+.progress{display:flex;align-items:center;gap:9px;font:10px 'DM Mono',monospace;color:#aaa}
+input[type=range]{width:100%;accent-color:var(--cream);cursor:pointer}
+.buttons{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:12px}
+.icon{background:none;border:0;color:var(--cream);font-size:20px;padding:8px}
+.play{height:48px;width:48px;border:0;border-radius:50%;background:var(--cream);color:var(--bg);font-size:18px}
+.hint{text-align:center;color:#777;font:9px 'DM Mono',monospace;letter-spacing:1px;line-height:1.8;margin-top:13px}
+.footer{width:min(100%,430px);display:flex;justify-content:space-between;color:#666;font:9px 'DM Mono',monospace;letter-spacing:1px;margin-top:22px}
+input[type=file]{display:none}
+@media(max-width:480px){.stage{height:68svh;min-height:470px}.page{padding-top:62px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="top"><div><strong>RESONANCE / 001</strong>VISUAL EXPERIMENT</div><div style="text-align:right"><strong>BOAF</strong>TYPE IN MOTION</div></header>
+
+<main class="stage" id="stage">
+  <div class="backdrop">
+    <div class="orb" id="orb"></div>
+    <div class="photo-label" id="placeholder">YOUR PHOTO GOES HERE</div>
+    <img id="photo" hidden alt="Your selected photo">
+  </div>
+  <div class="shade"></div>
+  <div class="meta"><div>VISUAL DIARY<br>OCT. 17 / 2026</div><div class="right">BILLIE EILISH<br>BIRDS OF A FEATHER*</div></div>
+  <div id="lyric" class="serif">stay close.</div>
+  <div class="side">A LITTLE PIECE OF FOREVER</div>
+  <div class="counter" id="counter">01 / 08</div>
+  <div class="flash" id="flash"></div>
+</main>
+
+<section class="controls">
+  <div class="track"><div><div class="title" id="title">Birds of a Feather</div><div class="artist">BILLIE EILISH · VISUAL PROTOTYPE</div></div><span class="badge" id="badge">DEMO MODE</span></div>
+  <div class="progress"><span id="now">0:00</span><input id="seek" type="range" min="0" max="100" value="0"><span id="end">0:32</span></div>
+  <div class="buttons">
+    <button class="icon" id="restart" aria-label="Restart">↺</button>
+    <button class="play" id="play" aria-label="Play">▶</button>
+    <button class="icon" id="choose" aria-label="Choose photo">▧</button>
+    <input id="photoFile" type="file" accept="image/*">
+    <input id="audioFile" type="file" accept="audio/*">
+  </div>
+  <div class="hint">PLAY DEMO WITHOUT AUDIO · ▧ LOAD PHOTO<br>DOUBLE-CLICK TITLE TO LOAD YOUR MP3</div>
+</section>
+<footer class="footer"><span>MADE OF MOTION</span><span>PROTOTYPE / V01</span></footer>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const stage=$('stage'), lyric=$('lyric'), flash=$('flash');
+const playBtn=$('play'), seek=$('seek'), photo=$('photo');
+const photoFile=$('photoFile'), audioFile=$('audioFile');
+
+const scenes=[
+ {text:'stay close.',style:'serif',anim:'zoom',start:0,end:3,flash:false},
+ {text:'FOREVER',style:'',anim:'punch',start:3,end:6,flash:true},
+ {text:'in every<br>lifetime',style:'serif',anim:'left',start:6,end:10,flash:false},
+ {text:'you &<br>me',style:'outline',anim:'drop',start:10,end:13,flash:true},
+ {text:'closer.',style:'serif',anim:'spin',start:13,end:17,flash:false},
+ {text:'NO<br>GOODBYE',style:'',anim:'right',start:17,end:21,flash:true},
+ {text:'just us.',style:'serif',anim:'zoom',start:21,end:26,flash:false},
+ {text:'always.',style:'serif',anim:'punch',start:26,end:32,flash:true}
+];
+// Placeholder phrases only. Replace these with text you have permission to use.
+let duration=32,time=0,playing=false,raf=0,last=0,index=-1,audio=null;
+let photoURL=null,audioURL=null,seeking=false;
+
+function fmt(t){t=Math.max(0,Math.floor(t));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')}
+function flashHit(){
+ flash.classList.remove('hit');void flash.offsetWidth;flash.classList.add('hit');
+ stage.classList.remove('shake');void stage.offsetWidth;stage.classList.add('shake');
+}
+function render(i,force=false){
+ i=Math.max(0,Math.min(scenes.length-1,i));
+ if(i===index&&!force)return;
+ index=i;const s=scenes[i];
+ lyric.className='';
+ lyric.innerHTML=s.text;
+ if(s.style)lyric.classList.add(...s.style.split(' '));
+ $('counter').textContent=String(i+1).padStart(2,'0')+' / '+String(scenes.length).padStart(2,'0');
+ requestAnimationFrame(()=>lyric.classList.add(s.anim));
+ if(s.flash)flashHit();
+ if(!photo.hidden){
+  photo.style.opacity=i%3===1?'.52':'.38';
+  photo.style.transform=i%2===0?'scale(1.18)':'scale(1.02) translateX(-1%)';
+ }
+}
+function sceneAt(t){
+ for(let i=scenes.length-1;i>=0;i--)if(t>=scenes[i].start)return i;
+ return 0;
+}
+function update(){
+ $('now').textContent=fmt(time);$('end').textContent=fmt(duration);
+ if(!seeking)seek.value=duration?time/duration*100:0;
+}
+function stop(){if(raf)cancelAnimationFrame(raf);raf=0}
+function tick(stamp){
+ if(!playing)return;
+ if(!last)last=stamp;
+ const dt=Math.min((stamp-last)/1000,.1);last=stamp;
+ if(audio){
+  time=audio.currentTime||0;
+  if(audio.ended){pause();return}
+ }else{
+  time+=dt;
+  if(time>=duration){time=duration;pause();update();return}
+ }
+ render(sceneAt(time));update();
+ if(playing)raf=requestAnimationFrame(tick);
+}
+function play(){
+ if(time>=duration){time=0;if(audio)audio.currentTime=0}
+ playing=true;last=0;playBtn.textContent='Ⅱ';
+ if(audio)audio.play().catch(()=>{pause();$('badge').textContent='TAP PLAY AGAIN'});
+ stop();raf=requestAnimationFrame(tick);
+}
+function pause(){
+ playing=false;playBtn.textContent='▶';if(audio)audio.pause();stop();last=0;
+}
+playBtn.onclick=()=>playing?pause():play();
+$('restart').onclick=()=>{pause();time=0;if(audio)audio.currentTime=0;render(0,true);update();play()};
+seek.onpointerdown=()=>seeking=true;
+seek.oninput=()=>{
+ time=Number(seek.value)/100*duration;
+ if(audio)audio.currentTime=time;
+ $('now').textContent=fmt(time);render(sceneAt(time));
+};
+seek.onchange=()=>{seeking=false;update()};
+$('choose').onclick=()=>photoFile.click();
+photoFile.onchange=()=>{
+ const file=photoFile.files[0];if(!file)return;
+ if(photoURL)URL.revokeObjectURL(photoURL);
+ photoURL=URL.createObjectURL(file);photo.src=photoURL;photo.hidden=false;$('placeholder').hidden=true;
+};
+$('title').ondblclick=()=>audioFile.click();
+audioFile.onchange=()=>{
+ const file=audioFile.files[0];if(!file)return;
+ pause();if(audioURL)URL.revokeObjectURL(audioURL);
+ audioURL=URL.createObjectURL(file);if(audio)audio.pause();
+ audio=new Audio(audioURL);audio.preload='metadata';
+ audio.onloadedmetadata=()=>{
+  duration=Number.isFinite(audio.duration)?audio.duration:32;time=0;
+  $('badge').textContent='LOCAL MP3';update();render(0,true);
+ };
+ audio.ontimeupdate=()=>{
+  if(!playing){time=audio.currentTime||0;update();render(sceneAt(time))}
+ };
+};
+document.addEventListener('keydown',e=>{
+ if(e.code==='Space'&&!['INPUT','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();playing?pause():play()}
+ if(e.key.toLowerCase()==='l')audioFile.click();
+});
+render(0,true);update();
+</script>
+</body>
+  </html>
+  
