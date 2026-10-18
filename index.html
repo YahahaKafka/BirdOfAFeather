@@ -227,6 +227,134 @@ button:disabled{opacity:.4;cursor:default}
       if(activeScene!==index||finished)return;
       $("eyebrow").textContent=scene.chapter;$("heading").innerHTML=scene.title;$("description").textContent=scene.caption;$("bottomNote").textContent=scene.note;
       $("counter").textContent=`${String(index+1).padStart(2,"0")} — ${String(scenes.length).padStart(2,"0")}`;
+      document.querySelectorAll(".index-button").forEach((b,i)=>{b.classList.toggle("active",i===index);b.setAttribute("aria-current",i===index?"step":"clamp(49px,13vw,76px);max-width:540px}
+ .description{max-width:300px;margin-top:19px;font-size:15px}
+ .bottom{left:20px;right:20px;bottom:22px;align-items:flex-end}
+ .bottom-note{max-width:160px;font-size:9px}.bottom-right{gap:10px}.nav-arrows{display:none}
+ .panel-grid{grid-template-columns:1fr;gap:28px}.panel{padding:30px 24px}.panel h1{font-size:clamp(48px,12vw,70px)}
+ .panel-copy{font-size:14px;margin-top:14px}.upload-stack{gap:10px}.upload-card{padding:12px}
+ .overlay{padding:14px}.panel{max-height:calc(100svh - 28px)}
+ .panel-foot{margin-top:14px}.primary-button{margin-top:17px}
+}
+@media(max-height:650px) and (min-width:701px){.panel{padding:30px 38px}.panel-grid{gap:35px}.panel h1{font-size:56px}.panel-copy{margin-top:12px}.upload-stack{gap:8px}.upload-card{padding:10px}.panel-foot{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main class="experience" id="experience">
+  <div class="backdrop" aria-hidden="true"></div>
+  <img class="photo-layer" id="photoA" alt="" aria-hidden="true">
+  <img class="photo-layer" id="photoB" alt="" aria-hidden="true">
+  <div class="shade" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+  <header class="topbar hide-during-overlay" id="topbar">
+    <div class="wordmark"><span class="mark">a</span><span>A little forever</span></div>
+    <div class="top-meta"><span>Birds of a Feather</span><span class="sound-state"><i class="sound-dot"></i><span id="soundLabel">Demo experience</span></span></div>
+  </header>
+  <nav class="side-index hide-during-overlay" id="sideIndex" aria-label="Story chapters">
+    <button class="index-button active" data-scene="0" aria-label="Chapter 1"><span>01</span></button>
+    <button class="index-button" data-scene="1" aria-label="Chapter 2"><span>02</span></button>
+    <button class="index-button" data-scene="2" aria-label="Chapter 3"><span>03</span></button>
+    <button class="index-button" data-scene="3" aria-label="Chapter 4"><span>04</span></button>
+    <button class="index-button" data-scene="4" aria-label="Chapter 5"><span>05</span></button>
+    <button class="index-button" data-scene="5" aria-label="Chapter 6"><span>06</span></button>
+  </nav>
+  <section class="content" aria-live="polite"><div class="copy visible" id="copy">
+    <div class="eyebrow" id="eyebrow">The beginning</div>
+    <h2 class="heading" id="heading">Somewhere,<br><em>it started.</em></h2>
+    <p class="description" id="description">A small moment that became a whole world.</p>
+  </div></section>
+  <footer class="bottom hide-during-overlay" id="bottom">
+    <div class="bottom-note" id="bottomNote">It began with something simple.</div>
+    <div class="bottom-right"><span class="counter" id="counter">01 — 06</span><div class="nav-arrows">
+      <button class="circle-button" id="prevButton" aria-label="Previous scene">←</button>
+      <button class="circle-button" id="nextButton" aria-label="Next scene">→</button>
+    </div></div>
+  </footer>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <section class="overlay" id="intro" aria-label="Start the experience">
+    <div class="panel"><div class="panel-grid">
+      <div>
+        <div class="kicker">A visual letter · 01 / 06</div>
+        <h1>Birds of<br><em>a Feather.</em></h1>
+        <p class="panel-copy">Some moments are too small to explain, but too important to forget. This is a little place for them.</p>
+        <p class="panel-foot">MADE OF LITTLE MOMENTS, HELD A LITTLE LONGER.</p>
+      </div>
+      <div>
+        <div class="upload-stack">
+          <div class="upload-card"><label for="photoInput">Your photographs <span>OPTIONAL · MAX 5</span></label><input id="photoInput" type="file" accept="image/*" multiple><p class="file-status" id="photoStatus">Add your own photos to make the story personal.</p></div>
+          <div class="upload-card"><label for="audioInput">Soundtrack <span>OPTIONAL</span></label><input id="audioInput" type="file" accept="audio/*"><p class="file-status" id="audioStatus">No soundtrack selected. A timed version is ready.</p></div>
+        </div>
+        <button class="primary-button" id="startButton">Enter the moment <span class="arrow">↗</span></button>
+        <p class="panel-foot">PHOTOS AND AUDIO STAY IN THIS BROWSER SESSION.</p>
+      </div>
+    </div></div>
+  </section>
+  <section class="overlay hidden" id="ending" aria-label="End of story">
+    <div class="panel ending-panel">
+      <div class="eyebrow">And it stays</div>
+      <h2>Some things<br><em>feel like forever.</em></h2>
+      <p class="panel-copy">Even when forever is made of little moments.</p>
+      <button class="primary-button" id="replayButton">Experience it again <span class="arrow">↻</span></button>
+      <p class="panel-foot">BIRDS OF A FEATHER · A LITTLE FOREVER</p>
+    </div>
+  </section>
+</main>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const scenes = [
+    {chapter:"The beginning",title:"Somewhere,<br><em>it started.</em>",caption:"A small moment that became a whole world.",note:"It began with something simple.",photo:0,crop:"50% 48%"},
+    {chapter:"The little things",title:"The ordinary<br><em>became golden.</em>",caption:"The kind of days you wish you could keep.",note:"The little things stayed.",photo:1,crop:"48% 42%"},
+    {chapter:"A familiar feeling",title:"With you,<br><em>time felt softer.</em>",caption:"Even silence had something to say.",note:"Somehow, it all felt familiar.",photo:2,crop:"54% 38%"},
+    {chapter:"Closer than words",title:"A thousand things<br><em>left unspoken.</em>",caption:"And somehow, still understood.",note:"No words needed.",photo:3,crop:"45% 55%"},
+    {chapter:"If time could pause",title:"I would stay<br><em>a little longer.</em>",caption:"Right where the world felt kind.",note:"Just a little longer.",photo:4,crop:"50% 34%"},
+    {chapter:"Still, always",title:"Some things<br><em>feel like forever.</em>",caption:"Even when forever is made of little moments.",note:"A little forever.",photo:0,crop:"52% 58%"}
+  ];
+  const DURATION = 48, photoInput=$("photoInput"), audioInput=$("audioInput"), layers=[$("photoA"),$("photoB")];
+  let photos=[], audio=null, audioUrl=null, started=false, finished=false, mode="demo", activeScene=-1, activeLayer=0, raf=0, demoStart=0, token=0, toastTimer=0, sceneTimer=0, lastProgress=0;
+  function notify(text){const el=$("toast");el.textContent=text;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2800)}
+  function resetPhotos(){photos.forEach(url=>URL.revokeObjectURL(url));photos=[]}
+  function loadPhotos(){
+    resetPhotos();
+    const files=Array.from(photoInput.files||[]).filter(f=>f.type.startsWith("image/")).slice(0,5);
+    photos=files.map(f=>URL.createObjectURL(f));
+    $("photoStatus").textContent=files.length?`${files.length} photo${files.length===1?"":"s"} ready.`:"Add your own photos to make the story personal.";
+    if(photoInput.files.length>5)notify("Only the first five photos will be used.");
+    else if(files.length)notify(`${files.length} photo${files.length===1?"":"s"} added.`);
+  }
+  function loadAudio(){
+    if(audio){audio.pause();audio.removeAttribute("src");audio.load();audio=null}
+    if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}
+    const file=audioInput.files&&audioInput.files[0];
+    if(!file){$("audioStatus").textContent="No soundtrack selected. A timed version is ready.";return}
+    if(!file.type.startsWith("audio/")){$("audioStatus").textContent="That file does not look like audio.";return}
+    audioUrl=URL.createObjectURL(file);audio=new Audio(audioUrl);audio.preload="metadata";
+    $("audioStatus").textContent=`Selected: ${file.name}`;
+    audio.addEventListener("ended",()=>{if(started&&mode==="audio")finish()});
+    audio.addEventListener("error",()=>{if(started&&mode==="audio"&&!finished){startDemo();$("soundLabel").textContent="Demo experience";notify("Audio couldn't load. Switched to timed mode.")}$("audioStatus").textContent="This browser couldn't read the audio file."});
+  }
+  photoInput.addEventListener("change",loadPhotos);audioInput.addEventListener("change",loadAudio);
+  function setPhoto(scene){
+    const currentToken=++token;
+    if(!photos.length){layers.forEach(l=>{l.classList.remove("visible");l.removeAttribute("src")});return}
+    const nextIndex=1-activeLayer,next=layers[nextIndex],old=layers[activeLayer],url=photos[scene.photo%photos.length];
+    next.classList.remove("visible");next.style.objectPosition=scene.crop;
+    const reveal=()=>{if(currentToken!==token||finished)return;next.classList.add("visible");old.classList.remove("visible");activeLayer=nextIndex};
+    if(next.getAttribute("src")===url&&next.complete&&next.naturalWidth){reveal();return}
+    next.onload=()=>{next.onload=null;next.onerror=null;reveal()};
+    next.onerror=()=>{next.onload=null;next.onerror=null;notify("One photo couldn't be displayed.")};
+    next.src=url;
+  }
+  function showScene(index,force=false){
+    index=Math.max(0,Math.min(scenes.length-1,index));
+    if(index===activeScene&&!force)return;
+    activeScene=index;const scene=scenes[index],copy=$("copy");copy.classList.remove("visible");clearTimeout(sceneTimer);
+    sceneTimer=setTimeout(()=>{
+      if(activeScene!==index||finished)return;
+      $("eyebrow").textContent=scene.chapter;$("heading").innerHTML=scene.title;$("description").textContent=scene.caption;$("bottomNote").textContent=scene.note;
+      $("counter").textContent=`${String(index+1).padStart(2,"0")} — ${String(scenes.length).padStart(2,"0")}`;
       document.querySelectorAll(".index-button").forEach((b,i)=>{b.classList.toggle("active",i===index);b.setAttribute("aria-current",i===index?"step":"r = nextIndex;
         }
 
