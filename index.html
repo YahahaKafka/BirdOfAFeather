@@ -178,15 +178,28 @@ button:disabled{opacity:.4;cursor:default}
   // song.mp3 is already trimmed from 2:34 to 3:15 of the full track (about 41 seconds).
   // These timestamps therefore use the trimmed file's own timeline, starting at 0.
   const scenes = [
-    {at:0, chapter:"Pre-Chorus", title:"And I don't know<br><em>what I'm cryin' for</em>", caption:"", note:"", photo:null},
-    {at:5, chapter:"Pre-Chorus", title:"I don't think I could<br><em>love you more</em>", caption:"", note:"", photo:null},
-    {at:9, chapter:"Pre-Chorus", title:"It might not be long,<br><em>but baby, I</em>", caption:"", note:"", photo:null},
-    {at:16, chapter:"Pre-Chorus", title:"Don't wanna say<br><em>goodbye</em>", caption:"", note:"", photo:null},
-    {at:27, chapter:"Chorus", title:"Birds of a feather,<br><em>we should stick together, I know</em>", caption:"('Til the day that I die)", note:"", photo:0, crop:"50% 48%"},
-    {at:32, chapter:"Chorus", title:"I said I'd never think<br><em>I wasn't better alone</em>", caption:"('Til the light leaves my eyes)", note:"", photo:1, crop:"48% 42%"},
-    {at:40, chapter:"Chorus", title:"Can't change the weather,<br><em>might not be forever</em>", caption:"('Til the day that I die)", note:"", photo:2, crop:"54% 38%"},
-    {at:48, chapter:"Chorus", title:"But if it's forever,<br><em>it's even better</em>", caption:"", note:"", photo:3, crop:"45% 55%"}
-  ];
+  {at:0, chapter:"Pre-Chorus", title:"And I don't know<br><em>what I'm cryin' for</em>", caption:"", note:"", photo:null},
+
+  {at:4.72, chapter:"Pre-Chorus", title:"I don't think I could<br><em>love you more</em>", caption:"", note:"", photo:null},
+
+  {at:9.16, chapter:"Pre-Chorus", title:"It might not be long,<br><em>but baby, I</em>", caption:"", note:"", photo:null},
+
+  {at:15.95, chapter:"Pre-Chorus", title:"Don't wanna say<br><em>goodbye</em>", caption:"", note:"", photo:null},
+
+  {at:18.16, chapter:"Chorus", title:"Birds of a feather", caption:"", note:"", photo:0, crop:"50% 48%"},
+
+  {at:19.88, chapter:"Chorus", title:"We should stick together,<br><em>I know</em>", caption:"('Til the day that I die)", note:"", photo:1, crop:"48% 42%"},
+
+  {at:22.79, chapter:"Chorus", title:"I said I'd never", caption:"", note:"", photo:2, crop:"54% 38%"},
+
+  {at:24.42, chapter:"Chorus", title:"Think I wasn't<br><em>better alone</em>", caption:"('Til the light leaves my eyes)", note:"", photo:3, crop:"45% 55%"},
+
+  {at:27.32, chapter:"Chorus", title:"Can't change the weather", caption:"", note:"", photo:4, crop:"50% 50%"},
+
+  {at:29.01, chapter:"Chorus", title:"Might not be forever", caption:"('Til the day that I die)", note:"", photo:4, crop:"50% 50%"},
+
+  {at:31.06, chapter:"Chorus", title:"But if it's forever,<br><em>it's even better</em>", caption:"", note:"", photo:4, crop:"50% 50%"}
+];
   const audio = new Audio("song.mp3");
   audio.preload = "auto";
   const photoFiles = ["foto1.jpg","foto2.jpg","foto3.jpg","foto4.jpg","foto5.jpg"];
