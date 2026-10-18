@@ -1,362 +1,233 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#171512">
-  <title>Birds of a Feather | A Little Forever</title>
-
-  <style>
-    :root {
-      --cream: #f7eddf;
-      --muted: #d5c4b0;
-      --gold: #d8b88c;
-      --dark: #171512;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-    }
-
-    body {
-      background: var(--dark);
-      color: var(--cream);
-      font-family: Georgia, "Times New Roman", serif;
-      overflow: hidden;
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .experience {
-      position: relative;
-      width: 100%;
-      height: 100svh;
-      min-height: 580px;
-      overflow: hidden;
-      isolation: isolate;
-      background:ers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
-      }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#171713">
+<meta name="description" content="A little forever — a cinematic memory experience.">
+<title>Birds of a Feather — A Little Forever</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+:root{--ink:#171713;--paper:#f2e9d9;--muted:#c4b8a5;--gold:#d9b98a;--line:rgba(242,233,217,.24);--ease:cubic-bezier(.2,.75,.25,1)}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:var(--ink);color:var(--paper)}
+body{font-family:'DM Sans',sans-serif;overflow:hidden}
+button,input{font:inherit}
+button{color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+button:disabled{opacity:.4;cursor:default}
+.experience{position:relative;isolation:isolate;width:100%;height:100vh;height:100svh;min-height:540px;overflow:hidden;background:#24231d}
+.backdrop,.backdrop::before,.backdrop::after,.photo-layer{position:absolute;inset:0;width:100%;height:100%}
+.backdrop{z-index:-5;overflow:hidden;background:
+ radial-gradient(ellipse at 18% 76%,rgba(197,124,69,.48),transparent 36%),
+ radial-gradient(ellipse at 76% 24%,rgba(106,112,85,.32),transparent 35%),
+ linear-gradient(125deg,#554335 0%,#282820 48%,#161715 100%)}
+.backdrop::before{content:"";position:absolute;inset:-12%;background:
+ radial-gradient(ellipse at 20% 70%,rgba(255,204,139,.38),transparent 18%),
+ radial-gradient(ellipse at 35% 85%,rgba(228,160,104,.18),transparent 28%),
+ radial-gradient(ellipse at 80% 20%,rgba(222,188,142,.16),transparent 26%);
+ filter:blur(28px);animation:ambient 18s ease-in-out infinite alternate}
+.backdrop::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,16,13,.32),transparent 55%),linear-gradient(0deg,rgba(12,12,10,.72),transparent 42%),rgba(20,19,15,.2)}
+.photo-layer{z-index:-4;object-fit:cover;opacity:0;transform:scale(1.035);filter:sepia(.12) saturate(.78) brightness(.75);transition:opacity 1.5s ease,transform 9s ease;pointer-events:none}
+.photo-layer.visible{opacity:.82;transform:scale(1.11)}
+.shade{position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(90deg,rgba(17,17,14,.42),transparent 65%),linear-gradient(0deg,rgba(15,15,12,.4),transparent 40%)}
+.grain{position:absolute;z-index:8;inset:-50%;width:200%;height:200%;pointer-events:none;opacity:.065;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");animation:grain .3s steps(2) infinite}
+.topbar{position:absolute;z-index:4;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:28px 4.2vw;font:9px 'DM Mono',monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.wordmark{display:flex;align-items:center;gap:11px;color:var(--paper)}
+.mark{width:21px;height:21px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;font:italic 12px 'Playfair Display',serif;color:var(--gold)}
+.top-meta{display:flex;align-items:center;gap:24px}
+.sound-state{display:flex;align-items:center;gap:8px}
+.sound-dot{width:5px;height:5px;border-radius:50%;background:#8eaa81;box-shadow:0 0 10px #8eaa81}
+.side-index{position:absolute;z-index:4;right:4.2vw;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:17px}
+.index-button{display:flex;align-items:center;gap:10px;border:0;background:none;padding:3px 0;color:rgba(242,233,217,.44);font:9px 'DM Mono',monospace;letter-spacing:.1em}
+.index-button::after{content:"";width:0;height:1px;background:var(--gold);transition:width .35s var(--ease)}
+.index-button.active{color:var(--paper)}
+.index-button.active::after{width:17px}
+.content{position:absolute;inset:0;display:flex;align-items:center;padding:90px 14vw 100px 12vw}
+.copy{width:min(720px,100%);opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.copy.visible{opacity:1;transform:translateY(0)}
+.eyebrow{display:flex;align-items:center;gap:13px;margin-bottom:24px;color:var(--gold);font:9px 'DM Mono',monospace;letter-spacing:.28em;text-transform:uppercase}
+.eyebrow::before{content:"";display:block;width:28px;height:1px;background:var(--gold)}
+.heading{margin:0;max-width:780px;font:400 clamp(52px,8.5vw,118px)/.98 'Playfair Display',Georgia,serif;letter-spacing:-.055em;text-wrap:balance;text-shadow:0 5px 40px #0002}
+.heading em{font-weight:400;color:#e0c49f}
+.description{max-width:370px;margin:25px 0 0;color:#dfd3c2;font:italic 16px/1.8 'Playfair Display',Georgia,serif}
+.bottom{position:absolute;z-index:4;left:4.2vw;right:4.2vw;bottom:28px;display:flex;align-items:flex-end;justify-content:space-between;gap:20px}
+.bottom-note{max-width:250px;color:rgba(242,233,217,.66);font:10px/1.6 'DM Mono',monospace;letter-spacing:.05em}
+.bottom-right{display:flex;align-items:center;gap:18px}
+.counter{color:var(--muted);font:10px 'DM Mono',monospace;letter-spacing:.13em}
+.progress{position:absolute;z-index:5;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.13)}
+.progress-fill{height:100%;width:0;background:var(--gold);transition:width .12s linear}
+.nav-arrows{display:flex;gap:8px}
+.circle-button{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:rgba(20,20,16,.18);display:grid;place-items:center;font-size:17px;transition:background .25s,border-color .25s,transform .25s}
+.circle-button:hover{background:rgba(242,233,217,.14);border-color:rgba(242,233,217,.65);transform:translateY(-2px)}
+.overlay{position:absolute;z-index:10;inset:0;display:flex;align-items:center;justify-content:center;padding:28px;background:rgba(18,18,15,.46);backdrop-filter:blur(14px);transition:opacity .8s ease,visibility .8s ease}
+.overlay.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.panel{position:relative;width:min(850px,100%);max-height:calc(100svh - 56px);overflow:auto;padding:clamp(28px,5vw,62px);border:1px solid rgba(242,233,217,.22);background:linear-gradient(135deg,rgba(35,34,28,.94),rgba(23,23,19,.92));box-shadow:0 30px 120px #0005}
+.panel::before{content:"";position:absolute;top:0;left:0;width:70px;height:2px;background:var(--gold)}
+.panel-grid{display:grid;grid-template-columns:1fr .8fr;gap:clamp(28px,5vw,70px);align-items:center}
+.panel h1,.panel h2{margin:0;font:400 clamp(48px,7vw,82px)/.98 'Playfair Display',Georgia,serif;letter-spacing:-.05em}
+.panel h1 em,.panel h2 em{color:var(--gold);font-weight:400}
+.panel-copy{max-width:380px;margin:20px 0 0;color:var(--muted);font:italic 15px/1.85 'Playfair Display',Georgia,serif}
+.kicker{margin-bottom:18px;color:var(--gold);font:9px 'DM Mono',monospace;letter-spacing:.25em;text-transform:uppercase}
+.upload-stack{display:grid;gap:14px}
+.upload-card{padding:15px;border:1px solid rgba(242,233,217,.17);background:rgba(255,255,255,.025)}
+.upload-card label{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px;color:var(--paper);font:10px 'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.upload-card label span{color:var(--gold);font-size:9px}
+.upload-card input{width:100%;color:var(--muted);font-size:11px}
+.upload-card input::file-selector-button{padding:8px 11px;margin-right:9px;border:1px solid rgba(242,233,217,.28);border-radius:0;background:transparent;color:var(--paper);font-size:10px;cursor:pointer}
+.file-status{margin:9px 0 0;color:#a89d8d;font:10px/1.6 'DM Mono',monospace;overflow-wrap:anywhere}
+.primary-button{display:inline-flex;align-items:center;justify-content:space-between;gap:35px;min-height:48px;margin-top:22px;padding:0 17px;border:1px solid var(--gold);background:var(--gold);color:#211e18;font:10px 'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;transition:background .25s,color .25s}
+.primary-button:hover{background:transparent;color:var(--paper)}
+.primary-button .arrow{font-size:17px}
+.panel-foot{margin-top:22px;color:#9e9383;font:9px/1.7 'DM Mono',monospace;letter-spacing:.02em}
+.ending-panel{text-align:center;width:min(680px,100%)}
+.ending-panel .eyebrow{justify-content:center}
+.ending-panel .eyebrow::after{content:"";display:block;width:28px;height:1px;background:var(--gold)}
+.ending-panel h2{font-size:clamp(50px,8vw,90px)}
+.ending-panel .panel-copy{margin:22px auto 0}
+.ending-panel .primary-button{margin-top:30px}
+.toast{position:absolute;z-index:20;top:78px;left:50%;max-width:calc(100% - 30px);transform:translate(-50%,-8px);padding:11px 17px;border:1px solid var(--line);background:rgba(20,20,16,.92);color:var(--paper);font:10px 'DM Mono',monospace;letter-spacing:.04em;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.hide-during-overlay{transition:opacity .4s}
+.experience.climax .heading{animation:breath 3s ease-in-out infinite alternate}
+@keyframes breath{to{transform:scale(1.018);text-shadow:0 0 55px #dfbd8733}}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(1%,-1%)}50%{transform:translate(-1%,1%)}75%{transform:translate(1%,1%)}100%{transform:translate(-1%,-1%)}}
+@keyframes ambient{to{transform:translate(2%,-3%) scale(1.08)}}
+@media(max-width:700px){
+ .experience{min-height:500px}
+ .topbar{padding:21px 20px}.top-meta{gap:10px}.top-meta span:last-child{display:none}
+ .side-index{right:18px;top:auto;bottom:92px;transform:none;flex-direction:row;gap:12px}
+ .index-button{font-size:8px}.index-button::after{display:none}.index-button.active{color:var(--gold)}
+ .content{padding:80px 26px 145px}
+ .heading{font-size:clamp(49px,13vw,76px);max-width:540px}
+ .description{max-width:300px;margin-top:19px;font-size:15px}
+ .bottom{left:20px;right:20px;bottom:22px;align-items:flex-end}
+ .bottom-note{max-width:160px;font-size:9px}.bottom-right{gap:10px}.nav-arrows{display:none}
+ .panel-grid{grid-template-columns:1fr;gap:28px}.panel{padding:30px 24px}.panel h1{font-size:clamp(48px,12vw,70px)}
+ .panel-copy{font-size:14px;margin-top:14px}.upload-stack{gap:10px}.upload-card{padding:12px}
+ .overlay{padding:14px}.panel{max-height:calc(100svh - 28px)}
+ .panel-foot{margin-top:14px}.primary-button{margin-top:17px}
+}
+@media(max-height:650px) and (min-width:701px){.panel{padding:30px 38px}.panel-grid{gap:35px}.panel h1{font-size:56px}.panel-copy{margin-top:12px}.upload-stack{gap:8px}.upload-card{padding:10px}.panel-foot{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
-
 <body>
-  <main class="experience" id="experience">
-    <div class="photo-stage" aria-hidden="true">
-      <img class="photo" id="photoA" alt="">
-      <img class="photo" id="photoB" alt="">
-    </div>
-
-    <div class="grain" aria-hidden="true"></div>
-    <div class="vignette" aria-hidden="true"></div>
-
-    <header class="topline" id="topline">
-      <span class="brand">A little forever</span>
-      <span>Birds of a Feather</span>
-    </header>
-
-    <section class="center-stage" aria-live="polite">
-      <div class="copy" id="copy">
-        <div class="chapter" id="chapter">The beginning</div>
-        <h2 class="main-text" id="mainText">Somewhere,<br>it started.</h2>
-        <p class="subtext" id="subtext">A small moment that became a whole world.</p>
+<main class="experience" id="experience">
+  <div class="backdrop" aria-hidden="true"></div>
+  <img class="photo-layer" id="photoA" alt="" aria-hidden="true">
+  <img class="photo-layer" id="photoB" alt="" aria-hidden="true">
+  <div class="shade" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+  <header class="topbar hide-during-overlay" id="topbar">
+    <div class="wordmark"><span class="mark">a</span><span>A little forever</span></div>
+    <div class="top-meta"><span>Birds of a Feather</span><span class="sound-state"><i class="sound-dot"></i><span id="soundLabel">Demo experience</span></span></div>
+  </header>
+  <nav class="side-index hide-during-overlay" id="sideIndex" aria-label="Story chapters">
+    <button class="index-button active" data-scene="0" aria-label="Chapter 1"><span>01</span></button>
+    <button class="index-button" data-scene="1" aria-label="Chapter 2"><span>02</span></button>
+    <button class="index-button" data-scene="2" aria-label="Chapter 3"><span>03</span></button>
+    <button class="index-button" data-scene="3" aria-label="Chapter 4"><span>04</span></button>
+    <button class="index-button" data-scene="4" aria-label="Chapter 5"><span>05</span></button>
+    <button class="index-button" data-scene="5" aria-label="Chapter 6"><span>06</span></button>
+  </nav>
+  <section class="content" aria-live="polite"><div class="copy visible" id="copy">
+    <div class="eyebrow" id="eyebrow">The beginning</div>
+    <h2 class="heading" id="heading">Somewhere,<br><em>it started.</em></h2>
+    <p class="description" id="description">A small moment that became a whole world.</p>
+  </div></section>
+  <footer class="bottom hide-during-overlay" id="bottom">
+    <div class="bottom-note" id="bottomNote">It began with something simple.</div>
+    <div class="bottom-right"><span class="counter" id="counter">01 — 06</span><div class="nav-arrows">
+      <button class="circle-button" id="prevButton" aria-label="Previous scene">←</button>
+      <button class="circle-button" id="nextButton" aria-label="Next scene">→</button>
+    </div></div>
+  </footer>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <section class="overlay" id="intro" aria-label="Start the experience">
+    <div class="panel"><div class="panel-grid">
+      <div>
+        <div class="kicker">A visual letter · 01 / 06</div>
+        <h1>Birds of<br><em>a Feather.</em></h1>
+        <p class="panel-copy">Some moments are too small to explain, but too important to forget. This is a little place for them.</p>
+        <p class="panel-foot">MADE OF LITTLE MOMENTS, HELD A LITTLE LONGER.</p>
       </div>
-    </section>
-
-    <footer class="bottomline" id="bottomline">
-      <span id="bottomNote">It began with something simple</span>
-      <span id="counter">01 / 08</span>
-    </footer>
-
-    <div class="progress-track" aria-hidden="true">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
-
-    <div class="status-message" id="statusMessage" role="status"></div>
-
-    <section class="intro" id="intro">
-      <div class="intro-content">
-        <div class="eyebrow">A memory in motion</div>
-        <h1>A little<br>forever.</h1>
-        <p class="intro-description">
-          Some moments are too small to explain,
-          but too important to forget. This is for those moments.
-        </p>
-
-        <div class="setup">
-          <div>
-            <label for="photoInput">Your photos (up to 5)</label>
-            <input
-              type="file"
-              id="photoInput"
-              accept="image/*"
-              multiple
-            >
-            <p class="file-status" id="photoStatus">
-              Foto opsional. Visual tetap berjalan tanpa foto.
-            </p>
-          </div>
-
-          <div>
-            <label for="audioInput">Audio file (optional)</label>
-            <input
-              type="file"
-              id="audioInput"
-              accept="audio/*"
-            >
-            <p class="file-status" id="audioStatus">
-              Tanpa audio, mode demo akan berjalan otomatis.
-            </p>
-          </div>
+      <div>
+        <div class="upload-stack">
+          <div class="upload-card"><label for="photoInput">Your photographs <span>OPTIONAL · MAX 5</span></label><input id="photoInput" type="file" accept="image/*" multiple><p class="file-status" id="photoStatus">Add your own photos to make the story personal.</p></div>
+          <div class="upload-card"><label for="audioInput">Soundtrack <span>OPTIONAL</span></label><input id="audioInput" type="file" accept="audio/*"><p class="file-status" id="audioStatus">No soundtrack selected. A timed version is ready.</p></div>
         </div>
-
-        <button class="start-button" id="startButton" type="button">
-          Enter the moment
-        </button>
+        <button class="primary-button" id="startButton">Enter the moment <span class="arrow">↗</span></button>
+        <p class="panel-foot">PHOTOS AND AUDIO STAY IN THIS BROWSER SESSION.</p>
       </div>
-    </section>
-
-    <section class="ending" id="ending">
-      <div class="ending-content">
-        <div class="eyebrow">And it stays</div>
-        <h2>Some things<br>feel like forever.</h2>
-        <p class="ending-description">
-          Even when forever is made of little moments.
-        </p>
-        <button class="replay-button" id="replayButton" type="button">
-          Experience it again
-        </button>
-      </div>
-    </section>
-  </main>
-
-  <script>
-    (() => {
-      "use strict";
-
-      const $ = id => document.getElementById(id);
-
-      const scenes = [
-        {
-          at: 0,
-          chapter: "The beginning",
-          title: "Somewhere,<br>it started.",
-          caption: "A small moment that became a whole world.",
-          photo: 0,
-          crop: "50% 50%",
-          note: "It began with something simple"
-        },
-        {
-          at: .12,
-          chapter: "The little things",
-          title: "The ordinary<br>became golden.",
-          caption: "The kind of days you wish you could keep.",
-          photo: 1,
-          crop: "48% 42%",
-          note: "The little things stayed"
-        },
-        {
-          at: .25,
-          chapter: "A familiar feeling",
-          title: "With you,<br>time felt softer.",
-          caption: "Even silence had something to say.",
-          photo: 2,
-          crop: "54% 38%",
-          note: "Somehow, it all felt familiar"
-        },
-        {
-          at: .38,
-          chapter: "Closer than words",
-          title: "A thousand things<br>left unspoken.",
-          caption: "And somehow, still understood.",
-          photo: 3,
-          crop: "45% 55%",
-          note: "No words needed"
-        },
-        {
-          at: .51,
-          chapter: "If time could pause",
-          title: "I would stay<br>here a little longer.",
-          caption: "Right where the world felt kind.",
-          photo: 4,
-          crop: "50% 34%",
-          note: "Just a little longer"
-        },
-        {
-          at: .65,
-          chapter: "Everything, all at once",
-          title: "Maybe this is<br>what home feels like.",
-          caption: "Not a place, but a feeling that follows you.",
-          photo: 0,
-          crop: "60% 50%",
-          note: "A feeling I carry with me"
-        },
-        {
-          at: .79,
-          chapter: "The part that stays",
-          title: "If the world<br>changes around us...",
-          caption: "I hope we remember who we were here.",
-          photo: 2,
-          crop: "42% 46%",
-          note: "Even as everything changes"
-        },
-        {
-          at: .90,
-          chapter: "Still, always",
-          title: "Some things<br>feel like forever.",
-          caption: "Even when forever is made of little moments.",
-          photo: 4,
-          crop: "52% 58%",
-          note: "A little forever"
-        }
-      ];
-
-      const DEMO_DURATION = 56;
-
-      const photoInput = $("photoInput");
-      const audioInput = $("audioInput");
-      const photoLayers = [$("photoA"), $("photoB")];
-
-      let photos = [];
-      let audio = null;
-      let audioUrl = null;
-      let started = false;
-      let finished = false;
-      let mode = "demo";
-      let activeScene = -1;
-      let activeLayer = 0;
-      let raf = 0;
-      let demoStart = 0;
-      let photoToken = 0;
-      let messageTimer = 0;
-
-      function message(text) {
-        const el = $("statusMessage");
-        el.textContent = text;
-        el.classList.add("show");
-
-        clearTimeout(messageTimer);
-        messageTimer = setTimeout(() => {
-          el.classList.remove("show");
-        }, 3000);
-      }
-
-      function clearPhotos() {
-        photos.forEach(url => URL.revokeObjectURL(url));
-        photos = [];
-      }
-
-      function loadPhotos() {
-        clearPhotos();
-
-        const files = Array.from(photoInput.files || [])
-          .filter(file => file.type.startsWith("image/"))
-          .slice(0, 5);
-
-        photos = files.map(file => URL.createObjectURL(file));
-
-        $("photoStatus").textContent = files.length
-          ? `${files.length} foto terpilih.`
-          : "Foto opsional. Visual tetap berjalan tanpa foto.";
-
-        if (files.length) {
-          message(`${files.length} foto siap digunakan.`);
-        }
-      }
-
-      function loadAudio() {
-        if (audio) {
-          audio.pause();
-          audio.removeAttribute("src");
-          audio.load();
-          audio = null;
-        }
-
-        if (audioUrl) {
-          URL.revokeObjectURL(audioUrl);
-          audioUrl = null;
-        }
-
-        const file = audioInput.files && audioInput.files[0];
-
-        if (!file) {
-          $("audioStatus").textContent =
-            "Tidak ada audio. Mode demo akan berjalan otomatis.";
-          return;
-        }
-
-        if (!file.type.startsWith("audio/")) {
-          $("audioStatus").textContent = "File yang dipilih bukan audio.";
-          return;
-        }
-
-        audioUrl = URL.createObjectURL(file);
-        audio = new Audio(audioUrl);
-        audio.preload = "metadata";
-
-        $("audioStatus").textContent = `Terpilih: ${file.name}`;
-
-        audio.addEventListener("ended", () => {
-          if (started && mode === "audio") finish();
-        });
-
-        audio.addEventListener("error", () => {
-          if (started && mode === "audio" && !finished) {
-            startDemo();
-            message("Audio gagal dibaca. Mode demo dimulai.");
-          }
-
-          $("audioStatus").textContent =
-            "Audio tidak bisa dibaca oleh browser.";
-        });
-      }
-
-      photoInput.addEventListener("change", loadPhotos);
-      audioInput.addEventListener("change", loadAudio);
-
-      function setPhoto(scene) {
-        const token = ++photoToken;
-
-        if (!photos.length) {
-          photoLayers.forEach(layer => {
-            layer.classList.remove("visible");
-            layer.removeAttribute("src");
-          });
-          return;
-        }
-
-        const nextIndex = 1 - activeLayer;
-        const next = photoLayers[nextIndex];
-        const old = photoLayers[activeLayer];
-        const url = photos[scene.photo % photos.length];
-
-        next.classList.remove("visible");
-        next.style.objectPosition = scene.crop;
-        next.style.animation = "none";
-
-        function reveal() {
-          if (token !== photoToken || finished) return;
-
-          next.style.animation = "";
-          next.classList.add("visible");
-          old.classList.remove("visible");
-          activeLayer = nextIndex;
+    </div></div>
+  </section>
+  <section class="overlay hidden" id="ending" aria-label="End of story">
+    <div class="panel ending-panel">
+      <div class="eyebrow">And it stays</div>
+      <h2>Some things<br><em>feel like forever.</em></h2>
+      <p class="panel-copy">Even when forever is made of little moments.</p>
+      <button class="primary-button" id="replayButton">Experience it again <span class="arrow">↻</span></button>
+      <p class="panel-foot">BIRDS OF A FEATHER · A LITTLE FOREVER</p>
+    </div>
+  </section>
+</main>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const scenes = [
+    {chapter:"The beginning",title:"Somewhere,<br><em>it started.</em>",caption:"A small moment that became a whole world.",note:"It began with something simple.",photo:0,crop:"50% 48%"},
+    {chapter:"The little things",title:"The ordinary<br><em>became golden.</em>",caption:"The kind of days you wish you could keep.",note:"The little things stayed.",photo:1,crop:"48% 42%"},
+    {chapter:"A familiar feeling",title:"With you,<br><em>time felt softer.</em>",caption:"Even silence had something to say.",note:"Somehow, it all felt familiar.",photo:2,crop:"54% 38%"},
+    {chapter:"Closer than words",title:"A thousand things<br><em>left unspoken.</em>",caption:"And somehow, still understood.",note:"No words needed.",photo:3,crop:"45% 55%"},
+    {chapter:"If time could pause",title:"I would stay<br><em>a little longer.</em>",caption:"Right where the world felt kind.",note:"Just a little longer.",photo:4,crop:"50% 34%"},
+    {chapter:"Still, always",title:"Some things<br><em>feel like forever.</em>",caption:"Even when forever is made of little moments.",note:"A little forever.",photo:0,crop:"52% 58%"}
+  ];
+  const DURATION = 48, photoInput=$("photoInput"), audioInput=$("audioInput"), layers=[$("photoA"),$("photoB")];
+  let photos=[], audio=null, audioUrl=null, started=false, finished=false, mode="demo", activeScene=-1, activeLayer=0, raf=0, demoStart=0, token=0, toastTimer=0, sceneTimer=0, lastProgress=0;
+  function notify(text){const el=$("toast");el.textContent=text;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2800)}
+  function resetPhotos(){photos.forEach(url=>URL.revokeObjectURL(url));photos=[]}
+  function loadPhotos(){
+    resetPhotos();
+    const files=Array.from(photoInput.files||[]).filter(f=>f.type.startsWith("image/")).slice(0,5);
+    photos=files.map(f=>URL.createObjectURL(f));
+    $("photoStatus").textContent=files.length?`${files.length} photo${files.length===1?"":"s"} ready.`:"Add your own photos to make the story personal.";
+    if(photoInput.files.length>5)notify("Only the first five photos will be used.");
+    else if(files.length)notify(`${files.length} photo${files.length===1?"":"s"} added.`);
+  }
+  function loadAudio(){
+    if(audio){audio.pause();audio.removeAttribute("src");audio.load();audio=null}
+    if(audioUrl){URL.revokeObjectURL(audioUrl);audioUrl=null}
+    const file=audioInput.files&&audioInput.files[0];
+    if(!file){$("audioStatus").textContent="No soundtrack selected. A timed version is ready.";return}
+    if(!file.type.startsWith("audio/")){$("audioStatus").textContent="That file does not look like audio.";return}
+    audioUrl=URL.createObjectURL(file);audio=new Audio(audioUrl);audio.preload="metadata";
+    $("audioStatus").textContent=`Selected: ${file.name}`;
+    audio.addEventListener("ended",()=>{if(started&&mode==="audio")finish()});
+    audio.addEventListener("error",()=>{if(started&&mode==="audio"&&!finished){startDemo();$("soundLabel").textContent="Demo experience";notify("Audio couldn't load. Switched to timed mode.")}$("audioStatus").textContent="This browser couldn't read the audio file."});
+  }
+  photoInput.addEventListener("change",loadPhotos);audioInput.addEventListener("change",loadAudio);
+  function setPhoto(scene){
+    const currentToken=++token;
+    if(!photos.length){layers.forEach(l=>{l.classList.remove("visible");l.removeAttribute("src")});return}
+    const nextIndex=1-activeLayer,next=layers[nextIndex],old=layers[activeLayer],url=photos[scene.photo%photos.length];
+    next.classList.remove("visible");next.style.objectPosition=scene.crop;
+    const reveal=()=>{if(currentToken!==token||finished)return;next.classList.add("visible");old.classList.remove("visible");activeLayer=nextIndex};
+    if(next.getAttribute("src")===url&&next.complete&&next.naturalWidth){reveal();return}
+    next.onload=()=>{next.onload=null;next.onerror=null;reveal()};
+    next.onerror=()=>{next.onload=null;next.onerror=null;notify("One photo couldn't be displayed.")};
+    next.src=url;
+  }
+  function showScene(index,force=false){
+    index=Math.max(0,Math.min(scenes.length-1,index));
+    if(index===activeScene&&!force)return;
+    activeScene=index;const scene=scenes[index],copy=$("copy");copy.classList.remove("visible");clearTimeout(sceneTimer);
+    sceneTimer=setTimeout(()=>{
+      if(activeScene!==index||finished)return;
+      $("eyebrow").textContent=scene.chapter;$("heading").innerHTML=scene.title;$("description").textContent=scene.caption;$("bottomNote").textContent=scene.note;
+      $("counter").textContent=`${String(index+1).padStart(2,"0")} — ${String(scenes.length).padStart(2,"0")}`;
+      document.querySelectorAll(".index-button").forEach((b,i)=>{b.classList.toggle("active",i===index);b.setAttribute("aria-current",i===index?"step":"r = nextIndex;
         }
 
         if (
