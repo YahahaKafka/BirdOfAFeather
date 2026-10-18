@@ -1,528 +1,585 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080808">
-<title>Birds of a Feather | Visual Edit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birds of a Feather</title>
 
 <style>
-:root {
-  --bg: #080808;
-  --white: #f6f4ef;
-  --lime: #d5ff72;
-}
-
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-html, body {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--bg);
-  color: var(--white);
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --fade: 2.2s;
 }
 
 body {
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
+  background: #090909;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+  height: 100dvh;
 }
 
-button {
+button, input {
   font: inherit;
 }
 
-/* FULL SCREEN CANVAS */
-
-#app {
+#intro {
   position: fixed;
   inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+  background:
+    radial-gradient(ellipse at center, #29201f 0%, #100e0e 50%, #050505 100%);
+  transition: opacity 1.8s ease, visibility 1.8s ease;
+}
+
+#intro.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.eyebrow {
+  color: #c6b5aa;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  margin-bottom: 26px;
+}
+
+.intro-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(38px, 9vw, 76px);
+  font-weight: normal;
+  line-height: 1.08;
+  letter-spacing: -2px;
+}
+
+.intro-subtitle {
+  margin-top: 18px;
+  color: #c2b8b2;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+}
+
+#setup {
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  align-items: center;
+  width: 100%;
+}
+
+.pick {
+  border: 1px solid #71615a;
+  background: #ffffff08;
+  color: #e8ded8;
+  border-radius: 30px;
+  padding: 12px 22px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background .3s;
+}
+
+.pick:active {
+  background: #ffffff20;
+}
+
+#photoInput, #audioInput {
+  display: none;
+}
+
+#photoStatus {
+  color: #b7aaa2;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+#start {
+  margin-top: 12px;
+  padding: 15px 42px;
+  border: none;
+  border-radius: 30px;
+  color: #171210;
+  background: #e8d9cf;
+  font-size: 11px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: transform .3s, background .3s;
+}
+
+#start:active {
+  transform: scale(.96);
+}
+
+#hint {
+  margin-top: 18px;
+  color: #756963;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  background: #090909;
   overflow: hidden;
-  background: var(--bg);
-  isolation: isolate;
 }
 
 #photo {
   position: absolute;
-  inset: -8%;
-  z-index: -4;
-  width: 116%;
-  height: 116%;
+  inset: -5%;
+  width: 110%;
+  height: 110%;
   object-fit: cover;
+  object-position: center;
   opacity: 0;
-  transform: scale(1.2);
-  filter: brightness(.72) contrast(1.1) saturate(.85);
-  transition: opacity .2s linear;
-  will-change: transform, filter;
+  transform: scale(1.04);
+  filter: saturate(.78) brightness(.77);
+  transition:
+    opacity 2s ease-in-out,
+    transform 7s ease-out,
+    filter 2s ease;
 }
 
-#photo.show {
+#photo.visible {
   opacity: 1;
-}
-
-#darkness {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(0,0,0,.3), transparent 35%, rgba(0,0,0,.28)),
-    radial-gradient(ellipse, transparent 20%, rgba(0,0,0,.24) 100%);
+  transform: scale(1.11);
 }
 
 #shade {
   position: absolute;
   inset: 0;
-  z-index: 5;
+  background:
+    linear-gradient(to top,
+      rgba(0,0,0,.84) 0%,
+      rgba(0,0,0,.35) 38%,
+      rgba(0,0,0,.05) 75%,
+      rgba(0,0,0,.25) 100%);
   pointer-events: none;
-  background: #000;
-  opacity: 0;
-}
-
-#shade.blink {
-  animation: blink .19s ease-out;
-}
-
-@keyframes blink {
-  0% { opacity: .82; }
-  100% { opacity: 0; }
 }
 
 #grain {
   position: absolute;
-  z-index: 10;
-  inset: -50%;
-  pointer-events: none;
-  opacity: .12;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
-  animation: grain .2s steps(2) infinite;
-}
-
-@keyframes grain {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(2%,-1%); }
-  50% { transform: translate(-1%,2%); }
-  75% { transform: translate(1%,1%); }
-  100% { transform: translate(-2%,-1%); }
-}
-
-/* OPENING */
-
-#opening {
-  position: absolute;
   inset: 0;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 25px;
-  text-align: center;
-  background:
-    radial-gradient(ellipse at 50% 43%, #292b25 0%, #111 42%, #080808 76%);
-  transition: opacity .55s ease, transform .7s cubic-bezier(.2,.8,.2,1);
+  opacity: .11;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
 }
 
-#opening.leave {
+#top {
+  position: absolute;
+  top: 30px;
+  left: 25px;
+  right: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+  color: #f2e7df;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  line-height: 1.8;
+  opacity: .85;
+}
+
+#topRight {
+  text-align: right;
+  color: #d0bfb4;
+}
+
+#lyrics {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(27px, 6.6vw, 52px);
+  line-height: 1.25;
+  letter-spacing: -.6px;
+  text-wrap: balance;
+  text-shadow: 0 2px 25px #0009;
   opacity: 0;
-  transform: scale(1.12);
+  filter: blur(5px);
+  transition:
+    opacity 1.4s ease,
+    filter 1.2s ease,
+    transform 1.6s ease;
   pointer-events: none;
 }
 
-.opening-kicker {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .42em;
-  text-transform: uppercase;
-  color: var(--lime);
-  margin-bottom: 24px;
-  animation: rise .8s both;
+#lyrics.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(-50%);
 }
 
-#opening h1 {
-  font-size: clamp(48px, 12vw, 112px);
-  font-weight: 950;
-  letter-spacing: -.095em;
-  line-height: .78;
-  text-transform: uppercase;
-  animation: titleReveal .9s cubic-bezier(.15,.8,.2,1) both;
+#lyrics.exit {
+  opacity: 0;
+  filter: blur(2px);
+  transform: translateY(calc(-50% + 10px));
 }
 
-#opening h1 span {
-  display: block;
-}
-
-#opening h1 span:last-child {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(255,255,255,.8);
-  margin-top: 12px;
-}
-
-.opening-sub {
-  margin-top: 28px;
-  color: #999;
-  font-size: 9px;
-  letter-spacing: .25em;
-  text-transform: uppercase;
-  animation: rise .8s .25s both;
-}
-
-#begin {
-  margin-top: 48px;
-  padding: 17px 25px;
-  border: 1px solid rgba(255,255,255,.6);
-  border-radius: 999px;
-  background: transparent;
-  color: white;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .24em;
-  cursor: pointer;
-  animation: rise .8s .4s both;
-  transition: background .2s, color .2s, transform .2s;
-}
-
-#begin:active {
-  background: white;
-  color: black;
-  transform: scale(.92);
-}
-
-.opening-foot {
+#bottom {
   position: absolute;
-  bottom: max(24px, env(safe-area-inset-bottom));
-  color: #666;
-  font-size: 8px;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-}
-
-@keyframes rise {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes titleReveal {
-  from {
-    opacity: 0;
-    transform: scale(1.3);
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-  }
-}
-
-/* THE EDIT */
-
-#edit {
-  position: absolute;
-  inset: 0;
-  display: none;
-  overflow: hidden;
-}
-
-#edit.active {
-  display: block;
-}
-
-#typography {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
+  bottom: 28px;
+  left: 25px;
+  right: 25px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0 3vw;
-  perspective: 900px;
-  overflow: hidden;
+  justify-content: space-between;
+  align-items: end;
+  color: #e8ded7;
 }
 
-#words {
-  width: 100%;
-  font-size: clamp(56px, 15vw, 170px);
-  font-weight: 950;
-  line-height: .79;
-  letter-spacing: -.095em;
-  text-transform: uppercase;
-  overflow-wrap: anywhere;
-  transform-origin: center;
-  will-change: transform, opacity, filter;
-  text-shadow: 0 8px 32px rgba(0,0,0,.25);
-}
-
-#words .line {
-  display: block;
-}
-
-#words .lime {
-  color: var(--lime);
-}
-
-#words .outline {
-  color: transparent;
-  -webkit-text-stroke: 1.5px white;
-}
-
-#words .italic {
+#caption {
   font-family: Georgia, serif;
-  font-weight: 400;
   font-style: italic;
-  letter-spacing: -.07em;
-  text-transform: none;
+  font-size: 13px;
+  color: #d2c3ba;
+  letter-spacing: .5px;
 }
 
-#words .tiny {
-  font-size: .42em;
-  letter-spacing: -.04em;
+#counter {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #c4b4a9;
 }
 
-#words .spaced {
-  letter-spacing: .06em;
-  font-size: .72em;
-}
-
-#words.velocity {
-  animation: velocity .48s cubic-bezier(.12,.8,.2,1) both;
-}
-
-#words.left {
-  animation: fromLeft .42s cubic-bezier(.12,.8,.2,1) both;
-}
-
-#words.right {
-  animation: fromRight .42s cubic-bezier(.12,.8,.2,1) both;
-}
-
-#words.drop {
-  animation: fromTop .46s cubic-bezier(.15,.8,.2,1) both;
-}
-
-#words.punch {
-  animation: punch .34s cubic-bezier(.1,.85,.2,1) both;
-}
-
-#words.tilt {
-  animation: tilt .48s cubic-bezier(.15,.8,.2,1) both;
-}
-
-#words.rise {
-  animation: fromBottom .44s cubic-bezier(.15,.8,.2,1) both;
-}
-
-@keyframes velocity {
-  0% {
-    opacity: 0;
-    transform: scale(3.5);
-    filter: blur(15px);
-  }
-  58% {
-    opacity: 1;
-    filter: blur(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes fromLeft {
-  0% {
-    opacity: 0;
-    transform: translateX(-110vw) scale(.65);
-    filter: blur(8px);
-  }
-  70% { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: translateX(0) scale(1); }
-}
-
-@keyframes fromRight {
-  0% {
-    opacity: 0;
-    transform: translateX(110vw) scale(.65);
-    filter: blur(8px);
-  }
-  70% { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: translateX(0) scale(1); }
-}
-
-@keyframes fromTop {
-  0% {
-    opacity: 0;
-    transform: translateY(-100vh) scale(1.25);
-    filter: blur(8px);
-  }
-  68% { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes punch {
-  0% { opacity: 0; transform: scale(.05); }
-  68% { opacity: 1; transform: scale(1.12); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes tilt {
-  0% {
-    opacity: 0;
-    transform: rotate(-12deg) scale(1.8);
-    filter: blur(8px);
-  }
-  70% { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: rotate(0) scale(1); }
-}
-
-@keyframes fromBottom {
-  0% {
-    opacity: 0;
-    transform: translateY(100vh) scale(.8);
-    filter: blur(8px);
-  }
-  70% { opacity: 1; filter: blur(0); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* FAST MOTION ACCENTS */
-
-.streak {
+#progress {
   position: absolute;
-  z-index: 2;
-  left: -40%;
-  width: 180%;
+  bottom: 0;
+  left: 0;
   height: 2px;
-  pointer-events: none;
-  opacity: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.9), transparent);
-  transform: rotate(-17deg) translateX(-40%);
+  width: 0;
+  background: #e2cfc2;
+  opacity: .75;
 }
 
-.streak.fire {
-  animation: streakPass .35s ease-out;
-}
-
-@keyframes streakPass {
-  0% { opacity: 0; transform: rotate(-17deg) translateX(-40%); }
-  30% { opacity: .9; }
-  100% { opacity: 0; transform: rotate(-17deg) translateX(55%); }
-}
-
-#streakA { top: 29%; }
-#streakB { top: 71%; transform: rotate(12deg) translateX(-40%); }
-
-#ending {
+#endScreen {
   position: absolute;
   inset: 0;
-  z-index: 15;
-  display: none;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  background: #080808;
   text-align: center;
-  padding: 25px;
+  background: #080707;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 2.5s ease, visibility 2.5s ease;
 }
 
-#ending.show {
-  display: flex;
-  animation: rise .8s both;
+#endScreen.show {
+  opacity: 1;
+  visibility: visible;
 }
 
-#ending h2 {
-  font-size: clamp(60px, 15vw, 150px);
-  font-weight: 950;
-  line-height: .78;
-  letter-spacing: -.09em;
+#endScreen h2 {
+  font: normal clamp(35px, 8vw, 60px) Georgia, serif;
+  line-height: 1.2;
 }
 
-#ending h2 span {
-  color: var(--lime);
-}
-
-#ending p {
-  margin-top: 28px;
-  font-size: 9px;
-  letter-spacing: .3em;
-  color: #888;
-}
-
-#again {
-  margin-top: 40px;
-  border: 1px solid #777;
-  padding: 15px 22px;
-  border-radius: 99px;
-  background: transparent;
-  color: white;
-  font-size: 10px;
-  letter-spacing: .2em;
-  cursor: pointer;
-}
-
-/* No persistent player UI. Audio is started automatically if provided. */
-
-@media (min-width: 760px) {
-  #words {
-    max-width: 1200px;
-    font-size: clamp(100px, 13vw, 190px);
-  }
-
-  #opening h1 {
-    font-size: clamp(90px, 10vw, 150px);
-  }
+#endScreen p {
+  margin-top: 20px;
+  color: #b8a69a;
+  font: italic 15px Georgia, serif;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #grain { animation: none; }
+  *, *::before, *::after {
+    transition-duration: .2s !important;
+  }
 }
 </style>
 </head>
 
 <body>
-<main id="app">
-  <img id="photo" alt="">
-  <div id="darkness"></div>
+
+<section id="intro">
+  <div class="eyebrow">A little film about you</div>
+
+  <h1 class="intro-title">
+    Birds of<br> a Feather
+  </h1>
+
+  <p class="intro-subtitle">
+    somewhere between memory and goodbye
+  </p>
+
+  <div id="setup">
+    <label class="pick" for="photoInput">
+      SELECT UP TO 5 PHOTOS
+    </label>
+    <input id="photoInput" type="file" accept="image/*" multiple>
+
+    <label class="pick" for="audioInput">
+      SELECT MUSIC (OPTIONAL)
+    </label>
+    <input id="audioInput" type="file" accept="audio/*">
+
+    <div id="photoStatus">No photos selected yet</div>
+
+    <button id="start">TAP TO BEGIN</button>
+  </div>
+
+  <p id="hint">
+    Best experienced with headphones.<br>
+    Your selected files stay in this browser.
+  </p>
+</section>
+
+<main id="stage">
+  <img id="photo" alt="Memory">
   <div id="shade"></div>
   <div id="grain"></div>
 
-  <section id="opening">
-    <p class="opening-kicker">A visual love letter</p>
-    <h1>
-      <span>BIRDS OF</span>
-      <span>A FEATHER</span>
-    </h1>
-    <p class="opening-sub">Somewhere between memory and goodbye</p>
-    <button id="begin">TAP TO BEGIN ↗</button>
-    <p class="opening-foot">A KINETIC TYPOGRAPHY EXPERIMENT</p>
-  </section>
-
-  <section id="edit">
-    <div class="streak" id="streakA"></div>
-    <div class="streak" id="streakB"></div>
-    <div id="typography">
-      <div id="words"></div>
+  <div id="top">
+    <div>
+      BIRDS OF A FEATHER<br>
+      <span style="opacity:.6">A little film</span>
     </div>
-  </section>
+    <div id="topRight">
+      A song<br>for someone special
+    </div>
+  </div>
 
-  <section id="ending">
-    <h2>STAY<br><span>CLOSE.</span></h2>
-    <p>EVERY MEMORY LEAVES A LIGHT</p>
-    <button id="again">REPLAY ↗</button>
-  </section>
+  <div id="lyrics"></div>
 
-  <audio id="audio" preload="auto"></audio>
+  <div id="bottom">
+    <div id="caption">a memory, softly kept</div>
+    <div id="counter">01 / 10</div>
+  </div>
+
+  <div id="progress"></div>
+
+  <div id="endScreen">
+    <h2>Some memories<br>stay with us.</h2>
+    <p>and maybe that's enough.</p>
+  </div>
 </main>
 
+<audio id="music" preload="auto"></audio>
+
 <script>
-(() => {
+const photoInput = document.getElementById('photoInput');
+const audioInput = document.getElementById('audioInput');
+const photoStatus = document.getElementById('photoStatus');
+const intro = document.getElementById('intro');
+const photo = document.getElementById('photo');
+const lyrics = document.getElementById('lyrics');
+const counter = document.getElementById('counter');
+const caption = document.getElementById('caption');
+const progress = document.getElementById('progress');
+const music = document.getElementById('music');
+const endScreen = document.getElementById('endScreen');
+
+let photos = [];
+let photoURLs = [];
+let audioURL = null;
+let timers = [];
+let started = false;
+let currentScene = -1;
+
+const scenes = [
+  { time: 0,  photo: 0, text: '', caption: 'a memory, softly kept', hold: 5 },
+  { time: 5,  photo: 1, text: 'You make the world feel a little softer.', caption: 'the little things', hold: 5 },
+  { time: 10, photo: 2, text: 'Some people just feel like home.', caption: 'somewhere familiar', hold: 5 },
+  { time: 15, photo: 3, text: 'If time could slow down, I would let it.', caption: 'just a little longer', hold: 5 },
+  { time: 20, photo: 4, text: 'I hope you know how special you are.', caption: 'for you', hold: 5 },
+  { time: 25, photo: 0, text: 'I would keep this moment a little longer.', caption: 'one more memory', hold: 5 },
+  { time: 30, photo: 2, text: 'Even ordinary days become memories.', caption: 'the days we keep', hold: 5 },
+  { time: 35, photo: 1, text: 'Maybe that is what makes it beautiful.', caption: 'without even trying', hold: 5 },
+  { time: 40, photo: 4, text: '', caption: 'thank you for being you', hold: 5 },
+  { time: 45, photo: 3, text: 'Some memories stay with us.', caption: 'always, in some way', hold: 6 }
+];
+
+photoInput.addEventListener('change', () => {
+  photoURLs.forEach(url => URL.revokeObjectURL(url));
+  photos = Array.from(photoInput.files).slice(0, 5);
+  photoURLs = photos.map(file => URL.createObjectURL(file));
+
+  photoStatus.textContent = photos.length
+    ? `${photos.length} photo${photos.length > 1 ? 's' : ''} selected`
+    : 'No photos selected yet';
+});
+
+audioInput.addEventListener('change', () => {
+  if (audioURL) URL.revokeObjectURL(audioURL);
+
+  const file = audioInput.files[0];
+  if (file) {
+    audioURL = URL.createObjectURL(file);
+    music.src = audioURL;
+    music.load();
+  }
+});
+
+function clearTimers() {
+  timers.forEach(clearTimeout);
+  timers = [];
+}
+
+function later(fn, delay) {
+  const id = setTimeout(fn, delay);
+  timers.push(id);
+}
+
+function showPhoto(index) {
+  if (!photos.length) return;
+
+  const actualIndex = index % photos.length;
+  photo.classList.remove('visible');
+
+  later(() => {
+    photo.src = photoURLs[actualIndex];
+
+    photo.onload = () => {
+      photo.classList.add('visible');
+
+      // Ganti framing secara perlahan tanpa shake.
+      const scale = 1.08 + (actualIndex % 3) * 0.025;
+      photo.style.transform = `scale(${scale})`;
+      photo.style.objectPosition = [
+        'center',
+        'center 35%',
+        'center 45%',
+        'center 55%',
+        'center'
+      ][actualIndex];
+    };
+  }, 450);
+}
+
+function showScene(index) {
+  if (index >= scenes.length) {
+    finish();
+    return;
+  }
+
+  currentScene = index;
+  const scene = scenes[index];
+
+  counter.textContent =
+    `${String(index + 1).padStart(2, '0')} / ${scenes.length}`;
+
+  caption.textContent = scene.caption;
+  progress.style.width = `${((index + 1) / scenes.length) * 100}%`;
+  showPhoto(scene.photo);
+
+  lyrics.classList.remove('show');
+  lyrics.classList.add('exit');
+
+  later(() => {
+    lyrics.textContent = scene.text;
+    lyrics.classList.remove('exit');
+
+    if (scene.text) {
+      requestAnimationFrame(() => {
+        lyrics.classList.add('show');
+      });
+    }
+  }, 650);
+
+  const nextTime = index + 1 < scenes.length
+    ? scenes[index + 1].time
+    : scene.time + scene.hold;
+
+  // Jadwalkan adegan berikutnya relatif terhadap waktu musik.
+  if (!music.src || music.paused) {
+    later(() => showScene(index + 1), (nextTime - scene.time) * 1000);
+  }
+}
+
+function syncToMusic() {
+  if (!music.duration || !Number.isFinite(music.duration)) return;
+
+  const duration = music.duration;
+  const elapsed = music.currentTime;
+  const scaledTime = elapsed / duration * 51;
+
+  let sceneIndex = scenes.findIndex((scene, i) => {
+    const next = scenes[i + 1];
+    return scaledTime >= scene.time &&
+      (!next || scaledTime < next.time);
+  });
+
+  if (sceneIndex < 0) sceneIndex = scenes.length - 1;
+
+  if (sceneIndex !== currentScene) {
+    clearTimers();
+    showScene(sceneIndex);
+  }
+
+  progress.style.width = `${Math.min(100, elapsed / duration * 100)}%`;
+}
+
+function finish() {
+  clearTimers();
+  lyrics.classList.remove('show');
+  photo.classList.remove('visible');
+  endScreen.classList.add('show');
+}
+
+document.getElementById('start').addEventListener('click', async () => {
+  if (started) return;
+  started = true;
+
+  intro.classList.add('hidden');
+
+  if (photos.length) {
+    showScene(0);
+  } else {
+    lyrics.textContent = 'Some moments are worth keeping.';
+    lyrics.classList.add('show');
+  }
+
+  if (music.src) {
+    try {
+      await music.play();
+      currentScene = -1;
+      music.addEventListener('timeupdate', syncToMusic);
+      music.addEventListener('ended', finish, { once: true });
+    } catch (error) {
+      // Jika browser menolak playback, tampilkan edit tanpa musik.
+      console.log('Audio playback unavailable.');
+    }
+  } else {
+    // Tanpa musik: gunakan durasi demo 51 detik.
+    scenes.forEach((scene, index) => {
+      later(() => showScene(index), scene.time * 1000);
+    });
+    later(finish, 51000);
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && music.src) {
+    // Tidak memaksa musik berhenti ketika berpindah aplikasi.
+  }
+});
+</script>
+
+</body>
+</html>
+) => {
   "use strict";
 
   const $ = id => document.getElementById(id);
